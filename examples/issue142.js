@@ -38,6 +38,7 @@ tx_channel.onopen = function(){
       Uint32Array(raw)[0] = counter++;
       tx_channel.send(raw);
     }, 1);
+
 };
 
 tx.createOffer(function(desc){

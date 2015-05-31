@@ -26,6 +26,9 @@ navigator.getUserMedia  = navigator.getUserMedia ||
                         navigator.mozGetUserMedia ||
                         navigator.msGetUserMedia;
 
+window.MediaSource = window.MediaSource || window.WebKitMediaSource;
+
+
 var audio = document.querySelector('audio');
 
 var localMediaStream = null;
@@ -44,15 +47,30 @@ function doHandleError(error)
 function doComplete()
 {
   console.log('complete');
-  if(navigator.getUserMedia){
+alert("complete");
+  if(navigator.getUserMedia && window.MediaSource){
      // Not showing vendor prefixes or code that works cross-browser.
       navigator.getUserMedia({audio: true}, function(stream) {
-         audio.src = window.URL.createObjectURL(stream);
+
+         
+         var mediaSource = new MediaSource();
+        
+         audio.src = window.URL.createObjectURL(mediaSource);
          localMediaStream = stream;
-         //se envia cada 3 segundos
+
+          var sourceBuffer = mediaSource.addSourceBuffer('audio/ogg; codecs="ogg"');
+
+         //se envia cada 3 segundos al node
           setInterval(function(){
+            var file = new Blob(new Uint8Array([97, 99, 107, 0]), {type: 'audio/ogg'});
             var data = new Uint8Array([97, 99, 107, 0]);
-                  dataChannels['reliable'].send(data.buffer);
+                  dataChannels['reliable'].send( JSON.stringify({
+                    boolean:true,
+                    integer:1,
+                    string:"wow",
+                    obj: {etc: "etcetera"}
+                  }));
+
                   dataChannels['reliable'].send("Hello bridge!");
           },3000);
        
@@ -60,9 +78,12 @@ function doComplete()
         alert("errorCallback getUserMedia");
         }
       );
-}else{
-    alert("no audio");
-}
+  }else{
+    if (!!!window.MediaSource) 
+      alert('MediaSource API is not available');
+    else
+      alert("no audio");
+  }
   
 }
 

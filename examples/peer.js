@@ -100,6 +100,7 @@ function doCreateDataChannels()
     };
     channel.onmessage = function(event) {
       var data = event.data;
+      console.log(typeof data);
       if('string' == typeof data) {
         console.log('onmessage:', data);
       } else {
