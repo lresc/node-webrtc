@@ -2,6 +2,7 @@ var nodeshout = require('../'),
     fs = require('fs'),
 request = require('request');
 
+
 nodeshout.init();
 
 console.log('Libshout version: ' + nodeshout.getVersion());
@@ -19,24 +20,23 @@ shout.setAudioInfo('samplerate', '44100');
 shout.setAudioInfo('channels', '2');
 
 shout.open();
-console.log("1"+request);
+
 request.get("http://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", function (error, response, body){
-console.log("jelo");
+
 	if(!error && response.statusCode ==200){
 		var csv = body;
+debugger;
 		console.log("body" + response);
 		//continue with your processing here
 	}else
 		console.log("error" + response.statusCode);
-settimeout(function(){
-console.log("ya está");
-},2000000);
+
 });
 
 
 //http://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3
 // Don't forget to replace mp3 file path.
-/*fs.open("./", 'r', function(status, fd) {
+/*fs.open("./01.mp3", 'r', function(status, fd) {
 console.log("1" +fd);
     if (status) {
         console.log("status" + status.message);
